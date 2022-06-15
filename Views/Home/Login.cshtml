@@ -1,0 +1,45 @@
+﻿@model ImportExcel.Models.tblRoleMaster
+@{
+    Layout = null;
+    ViewBag.Title = "Login";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page with Background Image Example</title>
+    <link href="~/Content/style.css" rel="stylesheet" />
+
+</head>
+<body>
+    <!-- partial:index.partial.html -->
+    <div id="bg"></div>
+
+    @using (Html.BeginForm("Login", "Home", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        if (@ViewBag.Message != null)
+        {
+            <div style="border: 1px solid red">
+                @ViewBag.Message
+            </div>
+        }
+
+        <div class="form-field">
+            @Html.TextBoxFor(a => a.UserName, new { @placeholder = "Email / Username", @type = "email" })
+        </div>
+
+        <div class="form-field">
+            @Html.PasswordFor(a => a.Password, new { @placeholder = "Password", @type = "password" })
+        </div>
+
+        <div class="form-field">
+            <button class="btn" type="submit">Log in</button>
+        </div>
+    }
+    <!-- partial -->
+</body>
+</html>
+

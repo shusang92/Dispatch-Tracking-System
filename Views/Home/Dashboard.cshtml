@@ -1,0 +1,47 @@
+﻿@model IEnumerable<ImportExcel.Models.GetProjectItemCount_Result>
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row" style="margin-top:80px">
+    <span style="font-size:24px;font-weight:bold" class="col-sm-10">
+        <span style="color: #004d99;font-weight:bold;">
+            <span class="glyphicon glyphicon-user"></span> Project Wise Loaded Item Details
+        </span>
+    </span>
+</div>
+<hr />
+<input type="hidden" id="hdnRoleId" name="hdnRoleId" value="0">
+<table id="example" class="table table-bordered  dataTable no-footer dtr-inline"
+       cellspacing="0" role="grid" style="width: 100%;background-color:#ebf3f9; margin-bottom:0px;">
+    <thead>
+        <tr>
+            <th>Project</th>
+            <th>Total Item</th>
+            <th>Total Approved</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Project)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TotalItem)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TotalApprove)</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(document).ready(function () {
+            $('#example').DataTable();
+        });
+</script>
+

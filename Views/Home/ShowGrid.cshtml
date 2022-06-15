@@ -1,0 +1,115 @@
+﻿@using ImportExcel.Models
+@{
+    ViewBag.Title = "ShowGrid";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string PMG = clsImplementationEnum.RoleType.PMG.GetStringValue();
+    string rolename = "";
+    clsLoginInfo objClsLoginInfo = new clsBase().objClsLoginInfo;
+    if (objClsLoginInfo != null)
+    {
+        rolename = objClsLoginInfo.RoleName;
+    }
+}
+
+<div class="row" style="margin-top:80px">
+    <span style="font-size:24px;font-weight:bold" class="col-sm-9">
+        <span style="color: #004d99;font-weight:bold;">
+            <span class="glyphicon glyphicon-user"></span> Import Data
+        </span>
+    </span>
+    @if (rolename == PMG)
+    {
+        <span class="col-sm-3" style="margin-bottom:5px">
+            <button type="button" id="btnOpen" data-toggle="modal" data-target="#FormModel" style="float:right" class="btn btn-success">UploadedFile</button>
+            @using (Html.BeginForm("Export", "Home", FormMethod.Post))
+            {
+                <input type="hidden" id="hdnProject" name="hdnProject" value="@ViewBag.Project">
+                <input type="submit" class="btn btn-success" value="Export to Excel" />
+            }
+        </span>
+    }
+</div>
+<hr />
+
+<div class="container">
+    <br />
+    <div style="width:100%; margin:0 auto;">
+        <table id="ImportGrid" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>DrawingNo</th>
+                    <th>MarkNo</th>
+                    <th>Batch</th>
+                    <th>PartSerialNo</th>
+                    <th>UnitWT</th>
+                    <th>Is Loaded</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<div id="divFormModel" class="row">
+    <div class="modal fade" id="FormModel" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body" style="padding-top:0px">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h3>
+                                <span style="color:#004d99">
+                                    <span class="glyphicon glyphicon-user"></span> Upload File
+                                </span>
+                            </h3>
+                        </div>
+                        <div class="col-md-4" style="padding-top:10px">
+                        </div>
+                    </div>
+                    <hr />
+                    @using (Html.BeginForm("Upload", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <input type="hidden" id="hdnProject" name="hdnProject" value="@ViewBag.Project">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="file" name="UploadedFile">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="submit" name="Submit" class="btn btn-success" value="Submit">
+                            </div>
+                        </div>
+                    }
+                    <hr />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var project = '@ViewBag.Project';
+    $(document).ready(function () {
+
+        $("#ImportGrid").DataTable({
+            "ajax": {
+                "url": "/Home/LoadGrid",
+                'data': { ProjectId: project },
+                "type": "POST",
+                "datatype": "json"
+            },
+            "columns": [
+                { "data": "DrawingNo", "name": "DrawingNo", "autoWidth": true },
+                { "data": "MarkNo", "name": "MarkNo", "autoWidth": true },
+                { "data": "Batch", "name": "Batch", "autoWidth": true },
+                { "data": "PartSerialNo", "name": "PartSerialNo", "autoWidth": true },
+                { "data": "UnitWT", "name": "UnitWT", "autoWidth": true },
+                //{ "data": "IsApprove", "name": "IsApprove", "autoWidth": true },
+                {
+                    "data": "IsApprove", render: function (data, type, row, meta) {
+                        return data == true?"Yes":"No";
+                    }
+                },
+            ]
+        });
+    });
+</script>

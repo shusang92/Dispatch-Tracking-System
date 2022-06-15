@@ -1,0 +1,108 @@
+﻿
+@{
+    ViewBag.Title = "Scan QR Code";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row" style="margin-top:80px">
+    <span style="font-size:24px;font-weight:bold" class="col-sm-9">
+        <span style="color: #004d99;font-weight:bold;">
+            <span class="glyphicon glyphicon-user"></span> Scan QR Code
+        </span>
+    </span>
+    <span class="col-sm-3" style="margin-bottom:5px">
+    </span>
+</div>
+<hr />
+<div class="row">
+    <div class="col-lg-1">
+        <span class="CustomLabel">Project</span>
+    </div>
+    <div class="col-lg-3">
+        @Html.DropDownList("txtProject", new SelectList(ViewBag.Project), "Select Project", new { id = "txtProject", @class = "form-control require" })
+        @*@Html.DropDownList("txtProject", new SelectList(ViewBag.Project, "Project", "Project"), "Select Project", new { id = "txtProject", @class = "form-control require" })*@
+    </div>
+    <div class="col-lg-1">
+        <span class="CustomLabel">Vehicle Number</span>
+    </div>
+    <div class="col-lg-3">
+        @Html.DropDownList("txtVehicleNo", new SelectList(ViewBag.VehicleNo), "Select Vehicle No", new { id = "txtVehicleNo", @class = "form-control require" })
+    </div>
+
+    <div>
+        <div class="col-lg-1">
+            <span class="CustomLabel">Scan Item</span>
+        </div>
+        <div class="col-lg-3">
+            @Html.TextBox("txtItemNo", null, new { id = "txtItemNo", @class = "form-control" })
+            <button type="button" id="btnOpen" class="btn btn-success" onclick="ScanQRCode()">
+                <span class="glyphicon glyphicon-qrcode"></span> Item Scan
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    function ScanQRCode() {
+        var project = $("#txtProject").val();
+        var vehicleNo = $("#txtVehicleNo").val();
+        if (project != "" && vehicleNo != "") {
+            window.setTimeout('window.location.href = "@Url.Action("OpenQRScanner", "ScanQRCode", new { Project = "Test",VehicleNo = "GJ1"})"');
+        }
+        else {
+            toastr.warning('Please select Project and Vehicle No');
+        }
+    }
+    var ResultItem = '@ViewBag.Item'
+    if (ResultItem != "") {
+        $("#txtItemNo").val(ResultItem);
+        var project = '@ViewBag.Proj';
+        $("#txtProject").val(project);
+        var vehicleNo = '@ViewBag.VNo';
+        $("#txtVehicleNo").val(vehicleNo);
+        GetProjectItemDetails(ResultItem);
+    }
+    else if ('@ViewBag.Proj' != "") {
+        var project = '@ViewBag.Proj';
+        $("#txtProject").val(project);
+        var vehicleNo = '@ViewBag.VNo';
+        $("#txtVehicleNo").val(vehicleNo);
+    }
+    function GetProjectItemDetails(Item) {
+        $.ajax({
+            url: '@Url.Action("GetProjectItemDetails", "ScanQRCode")',
+            dataType: "json",
+            type: "POST",
+            data: { Project: $("#txtProject").val(), Item: Item },
+            success: function (result) {
+                if (result.Key) {
+                    if (result.data.IsApprove == true) {
+                        toastr.warning('MarkNo - BatchNo Item already marked loaded on' + result.data.EditedOn);
+                    } else {
+                        if (confirm('Are you sure you want to load this Item?')) {
+                            $.ajax({
+                                url: '@Url.Action("LoadProjectItemDetails", "ScanQRCode")',
+                                dataType: "json",
+                                type: "POST",
+                                data: { markNo: result.data.MarkNo, batch: result.data.Batch, vehicleNo: $("#txtVehicleNo").val() },
+                                success: function (item) {
+                                    if (item.Key) {
+                                        toastr.success('MarkNo - BatchNo loaded');
+                                    }
+                                    else {
+                                        toastr.error('Error');
+                                    }
+                                }
+                            });
+                        } else {
+                            toastr.warning('MarkNo - BatchNo Not loaded');
+                        }
+                    }
+                }
+                else {
+                    toastr.warning('MarkNo - BatchNo Not available');
+                }
+            }
+        });
+    }
+</script>

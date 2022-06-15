@@ -1,0 +1,179 @@
+﻿@model IEnumerable<ImportExcel.Models.tblRoleMaster>
+@{
+    ViewBag.Title = "RoleMaster";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row" style="margin-top:80px">
+    <span style="font-size:24px;font-weight:bold" class="col-sm-10">
+        <span style="color: #004d99;font-weight:bold;">
+            <span class="glyphicon glyphicon-user"></span> Role Master
+        </span>
+    </span>
+    <span class="col-sm-2" style="margin-bottom:5px">
+        <button type="button" id="btnOpen" data-toggle="modal" data-target="#FormModel" style="float:right"
+                class="btn btn-success">
+            <span class="glyphicon glyphicon-plus"></span> Add New
+        </button>
+    </span>
+</div>
+<hr />
+<input type="hidden" id="hdnRoleId" name="hdnRoleId" value="0">
+<table id="example" class="table table-bordered  dataTable no-footer dtr-inline"
+       cellspacing="0" role="grid" style="width: 100%;background-color:#ebf3f9; margin-bottom:0px;">
+    <thead>
+        <tr>
+            <th class="hidden">RoleId</th>
+            <th>Name</th>
+            <th>UserName</th>
+            <th>Role Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td class="hidden">@Html.DisplayFor(modelItem => item.RoleId)</td>
+                    <td class="name">@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td class="name">@Html.DisplayFor(modelItem => item.UserName)</td>
+                    <td class="name">@Html.DisplayFor(modelItem => item.Role)</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#FormModel" onclick="EditRole(@item.RoleId)"><spam class="glyphicon glyphicon-edit"></spam></a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<div id="divFormModel" class="row">
+    <div class="modal fade" id="FormModel" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body" style="padding-top:0px">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h3>
+                                <span style="color:#004d99">
+                                    <span class="glyphicon glyphicon-user"></span> Role
+                                </span>
+                            </h3>
+                        </div>
+                    </div>
+                    <hr />
+                    <div style="margin-left:10px">
+                        <div class="row">
+                            <span class="CustomLabel">Name</span>
+                            @Html.TextBox("Name", "", new { id = "txtName", @class = "form-control require", @maxlength = "100" })
+                        </div>
+                        <div class="row">
+                            <span class="CustomLabel">User Name</span>
+                            @Html.TextBox("UserName", null, new { id = "txtUserName", @class = "form-control require", @maxlength = "100" })
+                        </div>
+                        <div class="row">
+                            <span class="CustomLabel">Role</span>
+                            @Html.DropDownList("txtRole", new List<SelectListItem> { new SelectListItem { Text = "PMG", Value = "PMG", Selected=true}, new SelectListItem { Text = "LOG", Value = "LOG"} }, "Select Role", new { id = "txtRole", @class = "form-control require" })
+                        </div>
+                    </div>
+                    <br />
+                    <hr />
+                    <div class="row">
+                        <center>
+                            <button type="submit" id="btnSave" style="width:30%" class="btn btn-success ">
+                                <span class="glyphicon glyphicon-floppy-disk"></span> SUBMIT
+                            </button>
+                            &nbsp;
+                            <a class="btn btn-danger" data-dismiss="modal" onclick="CloseModel();" style="display:inline-block;width:30%;"><span class="glyphicon glyphicon-remove"></span>CLOSE</a>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(document).ready(function () {
+            $('#example').DataTable();
+        });
+
+        CloseModel();
+
+        arrayRoles = @Html.Raw(Json.Encode(@ViewBag.Roles));
+
+        $("body").on("click", "[id*=example] .Edit", function () {
+            var row = $(this).closest("tr");
+            var psno = row.find(".psno");
+            var role = row.find(".role1");
+            $("#Psno").attr('disabled', true);
+            $("#Psno").val(psno.html().trim())
+            $("#Role").val(role.html().trim())
+        });
+
+        $("#btnSave").click(function () {
+            var name = $("#txtName").val();
+            var username = $("#txtUserName").val();
+            var role = $("#txtRole").val();
+
+            if (role && username && name) {
+                $.ajax({
+                    url: '@Url.Action("AddRole", "Home")',
+                    data: { RoleId: $("#hdnRoleId").val(), Role: role, Name: name, Username: username },
+                    dataType: "json",
+                    type: "POST",
+                    success: function (data) {
+                        if (data.Key) {
+                            toastr.success(data.Value);
+                            window.setTimeout('window.location.href = "@Url.Action("RoleMaster", "Home")"', 2000);
+                        }
+                        else {
+                            toastr.error(data.Value)
+                        }
+                    },
+                    error: function (xhr) {
+                    }
+                });
+            }
+            else {
+                toastr.warning('All feilds are mandatory');
+            }
+        });
+    });
+
+    function EditRole(RoleId) {
+        CloseModel();
+        $.ajax({
+            url: '@Url.Action("GetRoleDetails", "Home")',
+            dataType: "json",
+            type: "POST",
+            data: { RoleId: RoleId },
+            success: function (result) {
+                if (result.Key) {
+                    $("#hdnRoleId").val(result.data.RoleId);
+                    $("#txtRole").val(result.data.Role);
+                    $("#txtUserName").val(result.data.UserName);
+                    $("#txtName").val(result.data.Name);
+                    $("#txtUserName").prop( "disabled", true );
+                }
+                else {
+                    CloseModel()
+                }
+            }
+        });
+    }
+
+    function CloseModel() {
+        $("#hdnRoleId").val("0");
+        $("#txtRole").val("");
+        $("#txtUserName").val("");
+        $("#hdnUserName").val("");
+        $("#chkIsActive").prop("checked", false);
+        $("#txtUserName").prop( "disabled", false );
+
+    }
+</script>
+
+

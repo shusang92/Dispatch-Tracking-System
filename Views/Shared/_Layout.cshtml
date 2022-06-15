@@ -1,0 +1,73 @@
+﻿@using ImportExcel.Models
+@{
+    string username = "";
+    clsLoginInfo objClsLoginInfo = new clsBase().objClsLoginInfo;
+    if (objClsLoginInfo != null)
+    {
+        username = objClsLoginInfo.Name;
+    }
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Dispatch Tracking System</title>
+    @Styles.Render("~/Content/css")
+    <link href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    <script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            toastr.options.timeOut = 1500; // 1.5s
+        });
+    </script>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Dashboard", "Dashboard", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Projects", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Role Master", "RoleMaster", "Home")</li>
+                    <li>@Html.ActionLink("Scan QR Code", "Index", "ScanQRCode")</li>
+                </ul>
+                <ul class="nav navbar-nav" style="float:right">
+                    <li class="dropdown">
+                        @if (!string.IsNullOrEmpty(username))
+                        {
+                            <a href="#" style="color: white; font-size: 15px;z-index:1"> <b><span class="fa fa-user"></span>   WELCOME, @username </b> </a>
+                        }
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav" style="font-size:medium;float:right">
+                    <li class="dropdown">
+                        <a href="@Url.Action("Logout", "Home")" id="btnLogout" title="Logout" style="color:white"><span class="glyphicon glyphicon-log-out"></span> </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        @*<footer>
+                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            </footer>*@
+    </div>
+</body>
+</html>

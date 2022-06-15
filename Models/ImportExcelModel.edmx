@@ -1,0 +1,211 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ImportExcelDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblProject">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Project" Type="nvarchar" MaxLength="200" />
+          <Property Name="CreatedBy" Type="varchar" MaxLength="200" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="EditedBy" Type="nvarchar" MaxLength="200" />
+          <Property Name="EditedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tblRoleMaster">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="100" />
+          <Property Name="Password" Type="nvarchar" MaxLength="100" />
+          <Property Name="Role" Type="nvarchar" MaxLength="200" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="200" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="EditedBy" Type="nvarchar" MaxLength="200" />
+          <Property Name="EditedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tblTGBuxar">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DrawingNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="MarkNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="Batch" Type="nvarchar" MaxLength="50" />
+          <Property Name="PartSerialNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="UnitWT" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="CreatedBy" Type="varchar" MaxLength="200" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="EditedBy" Type="nvarchar" MaxLength="200" />
+          <Property Name="EditedOn" Type="datetime" />
+          <Property Name="ProjectId" Type="int" />
+          <Property Name="IsApprove" Type="bit" />
+          <Property Name="VehicleNo" Type="nvarchar" MaxLength="150" />
+          <Property Name="ApprovedOn" Type="datetime" />
+          <Property Name="ApprovedBy" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <Function Name="GetProjectItemCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="ImportExcelDBModelStoreContainer">
+          <EntitySet Name="tblProject" EntityType="Self.tblProject" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblRoleMaster" EntityType="Self.tblRoleMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblTGBuxar" EntityType="Self.tblTGBuxar" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ImportExcelDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="ImportExcelDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblProjects" EntityType="ImportExcelDBModel.tblProject" />
+          <EntitySet Name="tblRoleMasters" EntityType="ImportExcelDBModel.tblRoleMaster" />
+          <EntitySet Name="tblTGBuxars" EntityType="ImportExcelDBModel.tblTGBuxar" />
+          <FunctionImport Name="GetProjectItemCount" ReturnType="Collection(ImportExcelDBModel.GetProjectItemCount_Result)" />
+        </EntityContainer>
+        <EntityType Name="tblProject">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Project" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="EditedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EditedOn" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="tblRoleMaster">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UserName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Role" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="EditedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EditedOn" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="tblTGBuxar">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DrawingNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MarkNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Batch" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PartSerialNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UnitWT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="CreatedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="EditedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EditedOn" Type="DateTime" Precision="3" />
+          <Property Name="ProjectId" Type="Int32" />
+          <Property Name="IsApprove" Type="Boolean" />
+          <Property Name="VehicleNo" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ApprovedOn" Type="DateTime" Precision="3" />
+          <Property Name="ApprovedBy" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <ComplexType Name="GetProjectItemCount_Result">
+          <Property Type="String" Name="Project" Nullable="true" MaxLength="200" />
+          <Property Type="Int32" Name="TotalItem" Nullable="true" />
+          <Property Type="Int32" Name="TotalApprove" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ImportExcelDBModelStoreContainer" CdmEntityContainer="ImportExcelDBEntities">
+          <EntitySetMapping Name="tblProjects">
+            <EntityTypeMapping TypeName="ImportExcelDBModel.tblProject">
+              <MappingFragment StoreEntitySet="tblProject">
+                <ScalarProperty Name="EditedOn" ColumnName="EditedOn" />
+                <ScalarProperty Name="EditedBy" ColumnName="EditedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Project" ColumnName="Project" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblRoleMasters">
+            <EntityTypeMapping TypeName="ImportExcelDBModel.tblRoleMaster">
+              <MappingFragment StoreEntitySet="tblRoleMaster">
+                <ScalarProperty Name="EditedOn" ColumnName="EditedOn" />
+                <ScalarProperty Name="EditedBy" ColumnName="EditedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblTGBuxars">
+            <EntityTypeMapping TypeName="ImportExcelDBModel.tblTGBuxar">
+              <MappingFragment StoreEntitySet="tblTGBuxar">
+                <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+                <ScalarProperty Name="ApprovedOn" ColumnName="ApprovedOn" />
+                <ScalarProperty Name="VehicleNo" ColumnName="VehicleNo" />
+                <ScalarProperty Name="IsApprove" ColumnName="IsApprove" />
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="EditedOn" ColumnName="EditedOn" />
+                <ScalarProperty Name="EditedBy" ColumnName="EditedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UnitWT" ColumnName="UnitWT" />
+                <ScalarProperty Name="PartSerialNo" ColumnName="PartSerialNo" />
+                <ScalarProperty Name="Batch" ColumnName="Batch" />
+                <ScalarProperty Name="MarkNo" ColumnName="MarkNo" />
+                <ScalarProperty Name="DrawingNo" ColumnName="DrawingNo" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetProjectItemCount" FunctionName="ImportExcelDBModel.Store.GetProjectItemCount">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="ImportExcelDBModel.GetProjectItemCount_Result">
+                <ScalarProperty Name="Project" ColumnName="Project" />
+                <ScalarProperty Name="TotalItem" ColumnName="TotalItem" />
+                <ScalarProperty Name="TotalApprove" ColumnName="TotalApprove" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
